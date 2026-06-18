@@ -1,6 +1,7 @@
 package com.ecommerce.project.config;
 
 import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
@@ -20,17 +21,18 @@ public class SwaggerConfig {
                 .bearerFormat("JWT")
                 .description("JWT Bearer Token");
         SecurityRequirement bearerRequirement=new SecurityRequirement().
-                addList("B earer Authentication");
+                addList("Bearer Authentication");
         return new OpenAPI().info(
                 new Info().title("Spring Boot ecommerce API").
                         version("7.0").
-                        description("This is sample backend E-Commerce Website using SpringBoot frameWork ")
-                        .license(new License().name("Apache 2.0").url("http.//embarkx.com"))
+                        description("This is a sample backend E-Commerce Website using SpringBoot frameWork ")
+                        .license(new License().name("Apache 2.0").url("https://github.com/Dhanu0207/sb-ecom"))
                         .contact(new Contact()
                                 .name("Dhanush A D").
-                                email("dhanush7438491@gmail.com")
+                                email("dhanush7438491@gmail.com").
+                                url("https://github.com/Dhanu0207")
                         )
-                ).
+                ).externalDocs(new ExternalDocumentation().description("Project Document")).
                 components(new Components()
                         .addSecuritySchemes("Bearer Authentication",bearerScheme)).
                 addSecurityItem(bearerRequirement);
