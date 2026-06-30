@@ -71,7 +71,13 @@ public class ProductServiceImpl implements ProductService {
             double specialPrice = product.getPrice() - ((product.getDiscount() * 0.01) * product.getPrice());
             product.setSpecialPrice(specialPrice);
             Product savedProduct = productRepository.save(product);
-            return modelMapper.map(savedProduct, ProductDTO.class);
+
+            ProductDTO dto = modelMapper.map(savedProduct, ProductDTO.class);
+
+            dto.setCategoryId(savedProduct.getCategory().getCategoryId());
+            dto.setCategoryName(savedProduct.getCategory().getCategoryName());
+
+            return dto;
         }
         else {
             throw new APIException("Product is already exists!!");
@@ -106,9 +112,14 @@ public class ProductServiceImpl implements ProductService {
 //     List<Product> products =  productRepository.findAll();
      List<ProductDTO> productDTOS =  products.stream().map(
              product->{
-              ProductDTO productDTO = modelMapper.map(product,ProductDTO.class);
-              productDTO.setImages(constructImageUrl(product.getImages()));
-              return  productDTO;
+                 ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
+
+                 productDTO.setImages(constructImageUrl(product.getImages()));
+
+                 productDTO.setCategoryId(product.getCategory().getCategoryId());
+                 productDTO.setCategoryName(product.getCategory().getCategoryName());
+
+                 return productDTO;
              }).
              collect(Collectors.toList());
      if(productDTOS.isEmpty()){
@@ -145,7 +156,12 @@ public class ProductServiceImpl implements ProductService {
         List<ProductDTO> productDTOS = products.stream()
                 .map(product -> {
                     ProductDTO dto = modelMapper.map(product, ProductDTO.class);
+
                     dto.setImages(constructImageUrl(product.getImages()));
+
+                    dto.setCategoryId(product.getCategory().getCategoryId());
+                    dto.setCategoryName(product.getCategory().getCategoryName());
+
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -173,7 +189,12 @@ public class ProductServiceImpl implements ProductService {
         List<ProductDTO> productDTOS = products.stream()
                 .map(product -> {
                     ProductDTO dto = modelMapper.map(product, ProductDTO.class);
+
                     dto.setImages(constructImageUrl(product.getImages()));
+
+                    dto.setCategoryId(product.getCategory().getCategoryId());
+                    dto.setCategoryName(product.getCategory().getCategoryName());
+
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -215,7 +236,12 @@ public class ProductServiceImpl implements ProductService {
 
      cartDTOs.forEach(cart->cartService.updateProductInCarts(cart.getCartId(),productId));
 
-     return modelMapper.map(savedProduct,ProductDTO.class);
+        ProductDTO dto = modelMapper.map(savedProduct, ProductDTO.class);
+
+        dto.setCategoryId(savedProduct.getCategory().getCategoryId());
+        dto.setCategoryName(savedProduct.getCategory().getCategoryName());
+
+        return dto;
     }
 
     @Override
@@ -225,7 +251,12 @@ public class ProductServiceImpl implements ProductService {
         List<Cart> carts=cartRepository.findCartsByProductId(productId);
         carts.forEach(cart->cartService.deleteProductFromCart(cart.getCartId(),productId));
        productRepository.delete(product);
-       return  modelMapper.map(product,ProductDTO.class);
+        ProductDTO dto = modelMapper.map(product, ProductDTO.class);
+
+        dto.setCategoryId(product.getCategory().getCategoryId());
+        dto.setCategoryName(product.getCategory().getCategoryName());
+
+        return dto;
     }
 
     @Override
@@ -237,7 +268,12 @@ public class ProductServiceImpl implements ProductService {
         productFromDb.setImages(fileName);
         Product upatedProduct=productRepository.save(productFromDb);
 
-        return modelMapper.map(upatedProduct,ProductDTO.class);
+        ProductDTO dto = modelMapper.map(upatedProduct, ProductDTO.class);
+
+        dto.setCategoryId(upatedProduct.getCategory().getCategoryId());
+        dto.setCategoryName(upatedProduct.getCategory().getCategoryName());
+
+        return dto;
     }
 
 

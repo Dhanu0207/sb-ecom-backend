@@ -32,12 +32,21 @@ public class JwtUtils {
     private String jwtCookie;
 
     public String getJwtFromCookies(HttpServletRequest request) {
+
         Cookie cookie = WebUtils.getCookie(request, jwtCookie);
+
+        System.out.println("Cookie Name = " + jwtCookie);
+
         if (cookie != null) {
+            System.out.println("JWT Cookie Found");
+            System.out.println("JWT Value = " + cookie.getValue());
+
             return cookie.getValue();
-        } else {
-            return null;
         }
+
+        System.out.println("JWT Cookie NOT Found");
+
+        return null;
     }
     public String getJwtFromHeader(HttpServletRequest request) {
         String BearerToken = request.getHeader("Authorization");
@@ -46,10 +55,6 @@ public class JwtUtils {
        }
        return null;
     }
-
-
-
-
     public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal) {
         String jwt = generateTokenFromUsername(userPrincipal.getUsername());
         ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt)
